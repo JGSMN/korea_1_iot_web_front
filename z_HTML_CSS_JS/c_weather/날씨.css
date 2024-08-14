@@ -1,0 +1,31 @@
+
+.halfbox {
+  width: 520px;
+height: 1024px;
+left: 920px;
+gap: 0px;
+border-radius: 20px 0px 0px 0px;
+opacity: 0px;
+background: #0000004D;
+position: absolute;
+}
+
+.box top-left{
+  width: 208px;
+height: 24px;
+top: 38px;
+left: 40px;
+gap: 0px;
+opacity: 0px;
+
+}
+
+.background-image {
+  width: 1440px;
+height: 1024px;
+top: -752px;
+left: -2097px;
+gap: 0px;
+opacity: 0px;
+background-image: url(./날씨이미지/sunny.jpg);
+}

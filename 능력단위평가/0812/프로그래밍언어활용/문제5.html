@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>문제5.html</title>
+  </head>
+  <body>
+    <h1>"Welcome to JavaScript"</h1>
+    <p id="text">"이 버튼을 클릭해 보세요!"</p>
+    <button onclick="changeText()">"클릭"</button>
+    <script>
+      function changeText() {
+        const pElement = document.getElementById("text");
+
+        pElement.textContent = '"버튼이 클릭되었습니다!"';
+
+        console.log("Button clicked!");
+      }
+    </script>
+  </body>
+</html>
