@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 //# 고정될 컴포넌트
@@ -9,6 +9,9 @@ import Basic from './pages/a_basic';
 import Hooks from './pages/b_hooks';
 import RouterComponent from './pages/c_Router';
 import RouterHook from './pages/d_RouterHook';
+import Axios from './pages/e_Axios';
+import GlobalState from './pages/f_GlobalState';
+import Style from './pages/g_Style/Style01';
 
 import Parent from './pages/c_Router/Parent';
 
@@ -16,16 +19,117 @@ import Example01 from './pages/c_Router/Example01';
 import Example02 from './pages/c_Router/Example02';
 
 import Todos01 from './pages/z_todos';
+import axios from 'axios';
+
+// 전역 상태 관리 예제
+// import { useCountStore } from './pages/f_GlobalState/Zustand01';
 
 //! 리액트 프로젝트 개발 실행 명령어
 // npm run start
 // : http://localhost:3000 환경에서 실행
 
 function App() {
+  // const { count } = useCountStore();
+
+  const [username, setUsername] = useState<string>('Guest');
+  const [message, setMessage] = useState<string>('');
+
+  // 회원가입 용 사용자 이메일 & 비밀번호
+  const [registerUserEmail, setRegisterUserEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/auth/signUp', // HTTP 통신 경로
+        { // 전달할 데이터
+          email: registerUserEmail, 
+          password: registerPassword
+        }, 
+        { withCredentials: true } // 쿠키, 인증, 헤더와 같은 자격 증명을 요청에 포함
+      );
+
+      const responseData = response.data;
+
+      if (responseData.sucess) {
+        setMessage(responseData.message);
+        setRegisterUserEmail('');
+        setRegisterPassword('');
+      } else {
+        setMessage(responseData.message);
+      }
+
+    } catch (error) {
+      console.error('Error during registration', error);
+      setMessage('Registration Failed');
+    }
+  }
+
+  const handleSignIn = async () => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/signIn',
+        {
+          email: "test5",
+          password: "test5"
+        },
+        { withCredentials: true }
+      );
+
+      const responseData = response.data;
+      console.log(responseData);
+      
+      if (responseData.sucess) {
+        setUsername(responseData.data.user.email);
+        setMessage(responseData.message);
+      } else {
+        setMessage(responseData.message);
+      }
+    } catch (error) {
+      console.error('Error during singIn', error);
+      setMessage('Sign In Failed');
+    }
+  }
+
   return (
     <div>
       <h1>React Project</h1>
       <NaviBar />
+      
+      <div>
+        <h2>{username}님 안녕하세요 :)</h2>
+        <p>{message}</p>
+
+        {username === 'Guest' ? (
+          <>
+            <button onClick={handleSignIn}>로그인</button>
+            <div>
+              <h3>회원가입</h3>
+              <input 
+                type="text" 
+                placeholder='이메일을 입력해주세요'
+                value={registerUserEmail}
+                onChange={(e) => setRegisterUserEmail(e.target.value)}
+              />
+              <br />
+              <input 
+                type="text" 
+                placeholder='비밀번호를 입력해주세요'
+                value={registerPassword}
+                onChange={(e) => setRegisterPassword(e.target.value)}
+              />
+              <br />
+              <button onClick={handleRegister}>회원가입</button>
+            </div>
+          </>
+        ) : (
+          <>
+          
+          </>
+        )}
+      </div>
+
+
+      {/* <p>{count}</p> */}
 
       {/* Routes태그: Route를 감싸는 컴포넌트 */}
       <Routes>
@@ -57,6 +161,9 @@ function App() {
         </Route>
 
         <Route path='routerHook' element={<RouterHook />} />
+        <Route path='axios' element={<Axios />} />
+        <Route path='globalState' element={<GlobalState />} />
+        <Route path='style' element={<Style />} />
 
         {/* 예제 (참고용) */}
         <Route path='/todos01' element={<Todos01 />} />
